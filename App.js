@@ -5,7 +5,7 @@ let cookieParser = require("cookie-parser");
 let logger = require("morgan");
 let partials = require("express-partials");
 let mongoose = require("mongoose");
-let indexRouter = require("./routes/index");
+const router = require("./routes/index.routes");
 // let usersRouter = require("./routes/users");
 let cors = require("cors");
 let xss = require("xss-clean");
@@ -51,8 +51,7 @@ mongoose.connection
   });
 
 //myRouter.use(middleware.protect());
-
-app.use("/", indexRouter);
+app.use("/api", router);
 // error handler
 
 // catch 404 and forward to error handler
