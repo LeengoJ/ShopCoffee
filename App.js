@@ -11,7 +11,13 @@ let cors = require("cors");
 let xss = require("xss-clean");
 let helmet = require("helmet");
 let config = require("./configs/configs");
-let rateLimit = require("express-rate-limit");
+
+//
+const usersRoutes = require("./user.routes");
+const authRoutes = require("./auth.routes");
+const productsRoutes = require("./product.routes");
+const tablesRoutes = require("./table.routes");
+const discountsRoutes = require("./discount.routes");
 
 const myRouter = express.Router();
 // const middleware = require("./middleware/protect");
@@ -51,22 +57,31 @@ mongoose.connection
   });
 
 //myRouter.use(middleware.protect());
-app.use("/api", router);
+// app.use("/api", router);
+app.use("/api", function (res, req) {
+  return "ádasdjlasjd";
+});
+router.use("/users", usersRoutes);
+router.use("/auth", authRoutes);
+router.use("/products", productsRoutes);
+router.use("/tables", tablesRoutes);
+router.use("/discounts", discountsRoutes);
+
 // error handler
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+// app.use(function (req, res, next) {
+//   next(createError(404));
+// });
 
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+// app.use(function (err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
-});
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render("error");
+// });
 
 module.exports = app;
