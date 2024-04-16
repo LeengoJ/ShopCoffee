@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const { Timestamp } = require("mongodb");
+const bcrypt = require("bcrypt");
+var configs = require("../config/configs");
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new Schema(
   {
