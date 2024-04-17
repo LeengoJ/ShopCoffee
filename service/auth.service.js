@@ -8,17 +8,17 @@ module.exports = {
     var check = await User.find({
       $or: [{ email: item.email }, { username: item.username }],
     }).exec();
-    if (!check) {
-      return { error: "Trung gmail hoac username" };
+    if (check.length > 0) {
+      return { error: "Trùng gmail hoặc username" };
     } else {
       let newItem = await new User(item).save();
       return await newItem.getSignedJWT();
     }
   },
   Login: async (item) => {
-    const { userName, passWord } = item;
+    const { email, passWord } = item;
     // console.log(userName + passWord);
-    const result = await User.findByCredentinal(userName, passWord);
+    const result = await User.findByCredentinal(email, passWord);
 
     if (result.error) {
       return result;

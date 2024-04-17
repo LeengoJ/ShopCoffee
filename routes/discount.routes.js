@@ -1,23 +1,18 @@
-// const express = require("express");
-// const router = express.Router();
-// const checkRoleAdmin = require("../middleware/checkrole");
-// const {
-//   create,
-//   getDiscount,
-//   getAllDiscountsOfProduct,
-//   getAllDiscounts,
-//   update,
-//   deleteDiscount,
-//   getDiscountByCode,
-// } = require("../controllers/discountController");
+const express = require("express");
+const router = express.Router();
+const protect = require("../middleware/protect");
+const discountController = require("../controller/discountController");
 
-// router.use(checkRoleAdmin);
-// router.post("", create);
-// router.get("/:id", getDiscount);
-// router.get("/getAllDiscountsOfProduct/:productId", getAllDiscountsOfProduct);
-// router.get("", getAllDiscounts);
-// router.post("/updateDiscount/:discountId", update);
-// router.delete("/:id", deleteDiscount);
-// router.get("/getDiscountByCode", getDiscountByCode);
+router.use(protect.authorize("admin"));
+router.post("", discountController.CreateDiscount);
+router.get("/:id", discountController.GetDiscountById);
+router.get(
+  "/getAllDiscountsOfProduct/:productId",
+  discountController.GetDiscountOfProductById
+);
+router.get("", discountController.GetAllDiscount);
+router.post("/updateDiscount/:discountId", discountController.UpdateDiscount);
+router.delete("/:id", discountController.DeleteDiscount);
+router.get("/getDiscountByCode", discountController.GetDiscountByCode);
 
-// module.exports = router;
+module.exports = router;

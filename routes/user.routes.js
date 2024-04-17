@@ -1,15 +1,11 @@
-// const express = require("express");
-// const router = express.Router();
-// // const checkRoleAdmin = require("../middleware/checkrole");
-// const {
-//   getAllUsers,
-//   updateRole,
-//   changeBan,
-// } = require("../controllers/userController");
+const express = require("express");
+const router = express.Router();
+// const checkRoleAdmin = require("../middleware/checkrole");
+const userController = require("../controller/userController");
 
-// // router.use(checkRoleAdmin);
-// router.get("", getAllUsers);
-// router.post("/changeRole/:id", updateRole);
-// router.post("/changeBan/:id", changeBan);
+// router.use(checkRoleAdmin);
+router.get("", userController.GetAllUser);
+router.post("/changeRole/:id", userController.updateRole);
+router.post("/changeBan/:id", userController.changeBan);
 
-// module.exports = router;
+module.exports = router;
