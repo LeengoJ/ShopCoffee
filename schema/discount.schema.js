@@ -8,7 +8,7 @@ const DiscountSchema = new Schema(
     name: String,
     code: { type: String, unique: true },
     discountPercent: Number,
-    productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+    productIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   },
   { timestamps: true }
 );
