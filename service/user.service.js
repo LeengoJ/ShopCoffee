@@ -1,11 +1,10 @@
 const User = require("../schema/user.schema");
-var User = require("../schema/user.schema");
 
 module.exports = {
   GetById: async (item) => {
-    let User = await User.findById(item);
-    if (allUser.length > 0) {
-      return User;
+    let user = await User.findById(item);
+    if (user) {
+      return user;
     } else {
       return "Khong co user voi id nay";
     }

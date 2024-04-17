@@ -18,7 +18,7 @@ exports.CreateTable = async (req, res) => {
   }
 };
 exports.GetTableById = async (req, res) => {
-  const result = await TableService.GetTableById(req.param.id);
+  const result = await TableService.GetTableById(req.params.id);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
@@ -26,7 +26,7 @@ exports.GetTableById = async (req, res) => {
   }
 };
 exports.UpdateTable = async (req, res) => {
-  const result = await TableService.updatedTable(req.param.id, req.body);
+  const result = await TableService.updatedTable(req.params.id, req.body);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
@@ -34,7 +34,7 @@ exports.UpdateTable = async (req, res) => {
   }
 };
 exports.DeleteTable = async (req, res) => {
-  const result = await TableService.deletedTable(req.param.id);
+  const result = await TableService.deletedTable(req.params.id);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
@@ -51,7 +51,7 @@ exports.searchByName = async (req, res) => {
 };
 exports.updateStatusTable = async (req, res) => {
   const result = await TableService.updateStatusTable(
-    req.param.id,
+    req.params.id,
     req.body.status
   );
   if (result.error) {

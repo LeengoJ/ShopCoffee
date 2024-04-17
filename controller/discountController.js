@@ -18,7 +18,7 @@ exports.CreateDiscount = async (req, res) => {
   }
 };
 exports.GetDiscountById = async (req, res) => {
-  const result = await DiscountService.GetDiscountById(req.param.id);
+  const result = await DiscountService.GetDiscountById(req.params.id);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
@@ -35,7 +35,7 @@ exports.GetDiscountByCode = async (req, res) => {
 };
 exports.GetDiscountOfProductById = async (req, res) => {
   const result = await DiscountService.getAllDiscountsOfProduct(
-    req.param.productId
+    req.params.productId
   );
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
@@ -44,7 +44,7 @@ exports.GetDiscountOfProductById = async (req, res) => {
   }
 };
 exports.UpdateDiscount = async (req, res) => {
-  const result = await DiscountService.updatedDiscount(req.param.id, req.body);
+  const result = await DiscountService.updatedDiscount(req.params.id, req.body);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
@@ -52,7 +52,7 @@ exports.UpdateDiscount = async (req, res) => {
   }
 };
 exports.DeleteDiscount = async (req, res) => {
-  const result = await DiscountService.deletedDiscount(req.param.id);
+  const result = await DiscountService.deletedDiscount(req.params.id);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {

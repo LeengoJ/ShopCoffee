@@ -47,7 +47,6 @@ UserSchema.methods.UpdatePwNew = async function (user) {
 };
 //Gui ve client 1 token cho phep giu truy cap quyen thay doi passWord
 UserSchema.methods.resetPassword = function () {
-  console.log("5");
   const resetToken = crypto.randomBytes(20).toString("hex");
   this.resetPassToken = crypto
     .createHash("sha256") //Thuat toan su dung de ma hoa

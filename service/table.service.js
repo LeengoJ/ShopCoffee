@@ -15,7 +15,7 @@ module.exports = {
   },
   GetTableById: async (item) => {
     let table = await Table.findById(item).exec();
-    if (table.length > 0) {
+    if (table) {
       return table;
     } else {
       return "Khong co table nao";
@@ -25,7 +25,7 @@ module.exports = {
     const updatedTable = await Table.findByIdAndUpdate(id, newTable, {
       new: true,
     }); // {new: true} để trả về object sau khi cập nhật
-    if (updatedTable.length > 0) {
+    if (updatedTable) {
       return updatedTable;
     } else {
       return "Khong co table voi id nay";
@@ -41,7 +41,7 @@ module.exports = {
   },
   searchByName: async (name) => {
     const table = await Table.find({ name: name });
-    if (table.length > 0) {
+    if (table) {
       return table;
     } else {
       return "Khong co table nay";

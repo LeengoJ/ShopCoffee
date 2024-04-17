@@ -18,7 +18,8 @@ exports.CreateProduct = async (req, res) => {
   }
 };
 exports.GetProductById = async (req, res) => {
-  const result = await ProductService.GetProductById(req.param.id);
+  console.log(req.params.id);
+  const result = await ProductService.GetProductById(req.params.id);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
@@ -26,7 +27,7 @@ exports.GetProductById = async (req, res) => {
   }
 };
 exports.UpdateProduct = async (req, res) => {
-  const result = await ProductService.updatedProduct(req.param.id, req.body);
+  const result = await ProductService.updatedProduct(req.params.id, req.body);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
@@ -34,7 +35,7 @@ exports.UpdateProduct = async (req, res) => {
   }
 };
 exports.DeleteProduct = async (req, res) => {
-  const result = await ProductService.deletedProduct(req.param.id);
+  const result = await ProductService.deletedProduct(req.params.id);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {

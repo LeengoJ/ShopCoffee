@@ -10,7 +10,7 @@ exports.GetAllUser = async (req, res) => {
   }
 };
 exports.updateRole = async (req, res) => {
-  const result = await userService.updateRole(req.param.id, req.body.newRole);
+  const result = await userService.updateRole(req.params.id, req.body.newRole);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
@@ -18,7 +18,7 @@ exports.updateRole = async (req, res) => {
   }
 };
 exports.changeBan = async (req, res) => {
-  const result = await userService.changeBan(req.param.id, req.body.isBan);
+  const result = await userService.changeBan(req.params.id, req.body.isBan);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {

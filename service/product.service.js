@@ -15,7 +15,7 @@ module.exports = {
   },
   GetProductById: async (item) => {
     let product = await Product.findById(item).exec();
-    if (product.length > 0) {
+    if (product) {
       return product;
     } else {
       return "Khong co Product nao";

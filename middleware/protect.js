@@ -1,10 +1,7 @@
-var handleresult = require("../configs/handleResult");
-var config = require("../configs/configs");
+var handleresult = require("../helper/handleResult");
+var config = require("../config/configs");
 var jwt = require("jsonwebtoken");
 var userService = require("../service/user.service");
-var models_rollUser = require("../models/RoleUser");
-var models_roll = require("../models/Role");
-var models_userInEvent = require("../models/UserInEvent");
 
 module.exports = {
   protect: async (req, res, next) => {
@@ -36,7 +33,7 @@ module.exports = {
       let token = "";
       if (
         req.headers.authorization &&
-        req.headers.authorization.startsWith("bearer")
+        req.headers.authorization.startsWith("Bearer")
       ) {
         token = req.headers.authorization.split(" ")[1];
       } else if (req.cookies.token) {
@@ -46,8 +43,8 @@ module.exports = {
         return handleresult.showResult(res, 200, false, "vui long dang nhap");
       }
       const decode = jwt.verify(token, config.JWT_SECRET);
-
-      let role = decode.Role;
+      let user = await userService.GetById(decode.id);
+      let role = user.role;
       if (!roles.includes(role)) {
         return handleresult.showResult(res, 200, false, "ban khong co quyen");
       }
