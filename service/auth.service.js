@@ -5,9 +5,7 @@ const crypto = require("crypto");
 
 module.exports = {
   Register: async (item) => {
-    var check = await User.find({
-      $or: [{ email: item.email }, { username: item.username }],
-    }).exec();
+    const check = await User.find({ email: item.email });
     if (check.length > 0) {
       return { error: "Trùng gmail hoặc username" };
     } else {
