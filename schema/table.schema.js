@@ -6,7 +6,10 @@ const TableSchema = new Schema(
   {
     name: String,
     floor: { type: Number },
-    status: String,
+    status: {
+      type:String,
+      default:"open"
+    },
     tableNumber: { type: Number },
   },
   { timestamps: true }

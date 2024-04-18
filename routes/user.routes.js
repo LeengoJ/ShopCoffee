@@ -7,8 +7,8 @@ const userController = require("../controller/userController");
 //   protect.authorize("admin"),
 //   protect.authorize("admin")
 // router.use(checkRoleAdmin);
-router.get("", userController.GetAllUser);
-router.post("/changeRole/:id", userController.updateRole);
-router.post("/changeBan/:id", userController.changeBan);
+router.get("", protect.authorize("admin"),userController.GetAllUser);
+router.post("/changeRole/:id",protect.authorize("admin"), userController.updateRole);
+router.post("/changeBan/:id",protect.authorize("admin"), userController.changeBan);
 
 module.exports = router;

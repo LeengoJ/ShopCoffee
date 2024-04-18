@@ -14,7 +14,7 @@ router.post(
 router.delete("/:id", protect.authorize("admin"), tableController.DeleteTable);
 router.get("/searchByName", tableController.searchByName);
 router.post(
-  "/updateStatusTables/:tableId",
+  "/updateStatusTables/:id",
   protect.authorize("staff"),
   tableController.updateStatusTable
 );

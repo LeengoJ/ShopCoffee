@@ -5,12 +5,14 @@ let mongoose = require("mongoose");
 let config = require("./config/configs");
 let app = express();
 const indexRouter = require("./routes/index.routes");
+const cors = require('cors');
 global.__basedir = __dirname;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
 
 app.use("/api", indexRouter);
 

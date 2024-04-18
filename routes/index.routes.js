@@ -20,7 +20,7 @@ router.use("/tables", tablesRoutes);
 router.use("/discounts", discountsRoutes);
 
 router.use("/orders", orderRoutes);
-router.use("/bofore-orders", beforeorderRoutes);
+router.use("/before_orders", beforeorderRoutes);
 
 router.use("/files", filesRoutes);
 

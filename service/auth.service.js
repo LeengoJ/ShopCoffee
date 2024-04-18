@@ -14,16 +14,32 @@ module.exports = {
     }
   },
   Login: async (item) => {
-    const { email, passWord } = item;
+    const { email, password } = item;
     // console.log(userName + passWord);
-    const result = await User.findByCredentinal(email, passWord);
+    const result = await User.findByCredentinal(email, password);
 
     if (result.error) {
       return result;
     }
+    if(result.isBan=="yes"){
+      return {error:"Tài khoản đã bị khóa"};
+    }
     // console.log(result);
     return result.getSignedJWT();
   },
+  // Logout: async (id) => {
+  //   // console.log(userName + passWord);
+  //   const user = await User.findById(id);
+  //   user.
+  //   if (result.error) {
+  //     return result;
+  //   }
+  //   if(result.isBan=="yes"){
+  //     return {error:"Tài khoản đã bị khóa"};
+  //   }
+  //   // console.log(result);
+  //   return result.getSignedJWT();
+  // },
   ResetPassWord: async (item) => {
     const resetPassToken = crypto
       .createHash("sha256")

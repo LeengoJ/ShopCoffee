@@ -1,7 +1,9 @@
 const fs = require("fs");
+// const { promisify } = require('util');
 const baseUrl = "http://localhost:3000/api/files/";
 const apiResponse = require("../helper/api-response");
 const uploadFile = require("../middleware/upload");
+// const unlinkAsync = promisify(fs.unlink);
 
 const getListFiles = (req, res) => {
   const directoryPath = __basedir + "/public/upload/";
@@ -59,6 +61,7 @@ const upload = async (req, res) => {
     console.error("Error saving file:", err);
     return apiResponse.ErrorResponse(res, err);
   }
+  res.send(req.body);
 };
 module.exports = {
   getListFiles,
