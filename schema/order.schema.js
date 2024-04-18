@@ -28,6 +28,14 @@ const ProductItemSchema = new Schema(
   }
 );
 
+const STATUS = module.exports.STATUS = {
+  WAITING: "waiting",
+  PREPARING: "preparing",
+  COMPLETED: "completed",
+  CLOSED: "closed",
+  CANCELED: "canceled"
+};
+
 const OrderSchema = new Schema(
   {
     createTime: { 
@@ -94,10 +102,4 @@ module.exports = Order;
 
 module.exports.ProductItem = ProductItemSchema;
 
-const STATUS = module.exports.STATUS = {
-  WAITING: "waiting",
-  PREPARING: "preparing",
-  COMPLETED: "completed",
-  CLOSED: "closed",
-  CANCELED: "canceled"
-};
+

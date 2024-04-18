@@ -27,7 +27,10 @@ const ProductItemSchema = new Schema(
     }
   }
 );
-
+const STATUS = module.exports.STATUS = {
+  WAITING: "waiting",
+  HANDLED: "handled"
+};
 const BeforeOrderSchema = new Schema({
     time: { 
       type: Number, 
@@ -80,7 +83,4 @@ const BeforeOrder = mongoose.model("BeforeOrders", BeforeOrderSchema);
 module.exports = BeforeOrder;
 
 module.exports.ProductItem = ProductItemSchema;
-const STATUS = module.exports.STATUS = {
-  WAITING: "waiting",
-  HANDLED: "handled"
-};
+
