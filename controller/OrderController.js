@@ -7,12 +7,12 @@ const findDiscount = function(discounts, discountCode, productId){
     discounts.forEach(discount => {
         if(discount.startTime<=Date.now()||discount.endTime>=Date.now){
             if(discount.code==discountCode){
-                if(Array.isArray(discount.products)){
-                    if(discount.products.indexOf(productId)!=-1){
+                if(Array.isArray(discount.productIds)){
+                    if(discount.productIds.indexOf(productId)!=-1){
                         return discount;
                     }
                 }else{
-                    if(discount.products==productId){
+                    if(discount.productIds==productId){
                         return discount;
                     }
                 }
