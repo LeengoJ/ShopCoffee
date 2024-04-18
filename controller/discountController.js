@@ -111,13 +111,15 @@ exports.DeleteDiscount = async (req, res) => {
 exports.importExcelData2MongoDB = async (req, res, next) => {
   // -> Read Excel File to Json Data
   try {
+    console.log("await uploadFile(req, res);");
     await uploadFile(req, res);
     if (req.files == undefined) {
-      return apiResponse.validationErrorWithData(
+      apiResponse.validationErrorWithData(
         res,
         "Upload a file please!",
         {}
       );
+      return;
     }
     const excelData = excelToJson({
       sourceFile: __basedir + "/public/upload/" + req.files[0].filename,
@@ -143,7 +145,7 @@ exports.importExcelData2MongoDB = async (req, res, next) => {
         },
       ],
     });
-    console.log(excelData);
+    // console.log(excelData);
     // convert "startTime" to miliseconds
     excelData["Sheet1"] = excelData["Sheet1"].map((item) => {
       // split dd/mm/yy into [dd, mm, yy]
@@ -170,9 +172,26 @@ exports.importExcelData2MongoDB = async (req, res, next) => {
       return item;
     });
 
+    let existCodes = (await DiscountService.GetAllDiscount()).map(d=>d.code);
+    excelData["Sheet1"] = excelData["Sheet1"].filter(d=>{
+      if(existCodes.indexOf(d.code)==-1){
+        existCodes.push(d.code);
+        return true;
+      }
+      return false;
+    });
+
+    console.log("if(excelData.Sheet1.length==0)");
+
+    if(excelData.Sheet1.length==0){
+      apiResponse.ErrorResponse(res, "Các mã bị trùng hoặc trống");
+      return;
+    }
+
     await DiscountService.insertMany(excelData.Sheet1);
+    apiResponse.successResponseWithData(res, "Import thành công");
   } catch (err) {
     console.error("Error saving file:", err);
-    return apiResponse.ErrorResponse(res, err);
+    apiResponse.ErrorResponse(res, err);
   }
 };

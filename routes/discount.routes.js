@@ -17,7 +17,7 @@ router.get("/:id", protect.authorize("admin"),discountController.GetDiscountById
 router.post("/", protect.authorize("admin"),discountController.CreateDiscount);
 
 router.post(
-  "/importExcelData2MongoDB",
+  "/importExcelData2MongoDB",protect.authorize("admin"),
   discountController.importExcelData2MongoDB
 );
 
