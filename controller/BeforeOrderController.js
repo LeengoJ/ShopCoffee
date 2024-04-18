@@ -269,6 +269,8 @@ module.exports.convertToOrder = async (req,res) => {
         newOrder.user = beforeOrder.user;
         newOrder.sdt = beforeOrder.user.sdt;
         newOrder.staff = idUser;
+        newOrder.starTime = Date.now();
+        newOrder.endTime = Date.now();
 
         resAction = await OrderService.create(newOrder);
         if (!resAction.isSuccess) {

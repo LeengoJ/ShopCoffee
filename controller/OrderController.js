@@ -143,6 +143,8 @@ module.exports.create = async (req,res) => {
         newOrder.products = productsDetails;
         newOrder.numberTable = tableNumber;
         newOrder.staff = idUser;
+        newOrder.starTime = Date.now();
+        newOrder.endTime = Date.now();
 
         let resAction = await OrderService.create(newOrder);
         if (!resAction.isSuccess) {
