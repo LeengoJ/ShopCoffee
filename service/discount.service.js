@@ -15,7 +15,7 @@ module.exports = {
   },
   GetDiscountById: async (item) => {
     let discount = await Discount.findById(item).exec();
-    if (discount.length > 0) {
+    if (discount) {
       return discount;
     } else {
       return "Khong co Discount nao";
@@ -53,6 +53,14 @@ module.exports = {
       return updateStatus;
     } else {
       return "Khong co Discount nay";
+    }
+  },
+  insertMany: async (data) => {
+    const discount = Discount.insertMany(data);
+    if (discount.length > 0) {
+      return discount;
+    } else {
+      return "loi tao";
     }
   },
 };

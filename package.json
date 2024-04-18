@@ -4,6 +4,8 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "convert-excel-to-json": "^1.7.0",
     "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
@@ -15,6 +17,7 @@
     "node js",
     "upload",
     "download",
+    "excel",
     "file",
     "rest api",
     "express"

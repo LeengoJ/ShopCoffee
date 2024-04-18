@@ -39,11 +39,11 @@ const download = (req, res) => {
   });
 };
 const upload = async (req, res) => {
-  console.log("sad");
-
   try {
     await uploadFile(req, res);
-    if (req.file == undefined) {
+    console.log(req.files);
+
+    if (!req.files || !req.files[0]) {
       return apiResponse.validationErrorWithData(
         res,
         "Upload a file please!",
@@ -53,7 +53,7 @@ const upload = async (req, res) => {
     return apiResponse.successResponseWithData(
       res,
       "File Uploaded Successfully",
-      { path: req.file.path }
+      { path: req.files[0].path }
     );
   } catch (err) {
     console.error("Error saving file:", err);

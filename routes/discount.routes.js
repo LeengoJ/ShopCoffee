@@ -14,5 +14,8 @@ router.get("", discountController.GetAllDiscount);
 router.post("/updateDiscount/:discountId", discountController.UpdateDiscount);
 router.delete("/:id", discountController.DeleteDiscount);
 router.get("/getDiscountByCode", discountController.GetDiscountByCode);
-
+router.post(
+  "/importExcelData2MongoDB",
+  discountController.importExcelData2MongoDB
+);
 module.exports = router;
