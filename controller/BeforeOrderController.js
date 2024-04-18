@@ -285,3 +285,54 @@ module.exports.convertToOrder = async (req,res) => {
         handleResult.systemError(res);
     }  
 }
+
+module.exports.getBeforeOrdersOfUser = async (req,res) => {
+    try {
+        const idUser = req.user.id;
+        let resAction = await BeforeOrderService.getManyAndPopulateUser({user: idUser});
+        if (!resAction.isSuccess) {
+            handleResult.fail(res,resAction.error);
+            return;
+        }
+        let beforeOrders = resAction.data;
+        beforeOrders = beforeOrders.map(before=>{
+            before = before.toObject();
+            before.orderId = before._id.toString();
+            before.staff = before.staff&&before.staff.name;
+            before.user = before.user.name;
+            return before;
+        });
+        handleResult.success(res,beforeOrders);
+    }  
+    catch (error) {  
+        console.log(error);
+        handleResult.systemError(res);
+    }  
+}
+module.exports.userGetdetails = async (req,res) => {
+    try {
+        const id = req.params.id;
+        const idUser = req.user.id;
+
+        let resAction = await BeforeOrderService.getOneAndPopulateUser(id);
+        if (!resAction.isSuccess) {
+            handleResult.fail(res,resAction.error);
+            return;
+        }
+        let order = resAction.data.toObject();
+        if(order.user._id.toString() !== idUser) {
+            handleResult.fail(res,"Đây không phải đơn hàng của bạn");
+            return;
+        }
+        order.orderId = order._id.toString();
+        order.staff = order.staff&&order.staff.name;
+        order.user = order.user.name;
+        order.products = convertProductsToProductSizes(order.products);
+        
+        handleResult.success(res,order);
+    }  
+    catch (error) {  
+        console.log(error);
+        handleResult.systemError(res);
+    }  
+}

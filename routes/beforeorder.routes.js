@@ -10,5 +10,7 @@ router.get('/',protect.authorize("staff"),Controller.getList);
 router.get('/details/:id',protect.authorize("staff"),Controller.details);
 router.post('/changeStatus/:id',protect.authorize("staff"),Controller.changeStatus);
 router.post('/convertToOrder/:id',protect.authorize("staff"),Controller.convertToOrder);
+router.get('/getBeforeOrdersOfUser',protect.authorize("user"),Controller.getBeforeOrdersOfUser);
+router.get('/userGetDetails/:id',protect.authorize("user"),Controller.userGetdetails);
 
 module.exports = router;
