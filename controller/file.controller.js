@@ -41,14 +41,25 @@ const download = (req, res) => {
   });
 };
 const upload = async (req, res) => {
-  if (req.file != undefined) {
-    console.log(req.file.path);
-    try{
-      await uploadFile.unlinkAsync(req.file.path);
-      
-    }catch(err){
-      console.log(err);
+  try {
+    await uploadFile(req, res);
+    console.log(req.files);
+
+    if (!req.files || !req.files[0]) {
+      return apiResponse.validationErrorWithData(
+        res,
+        "Upload a file please!",
+        {}
+      );
     }
+    return apiResponse.successResponseWithData(
+      res,
+      "File Uploaded Successfully",
+      { path: req.files[0].path }
+    );
+  } catch (err) {
+    console.error("Error saving file:", err);
+    return apiResponse.ErrorResponse(res, err);
   }
   res.send(req.body);
 };

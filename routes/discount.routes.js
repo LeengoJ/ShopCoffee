@@ -8,10 +8,17 @@ router.get(
   discountController.GetDiscountOfProductById
 );
 router.get("/getDiscountByCode", discountController.GetDiscountByCode);
+
 router.get("/getAll", protect.authorize("admin"), discountController.GetAllDiscount);
 router.post("/updateDiscount/:id", protect.authorize("admin"),discountController.UpdateDiscount);
 router.delete("/:id", protect.authorize("admin"),discountController.DeleteDiscount);
 
 router.get("/:id", protect.authorize("admin"),discountController.GetDiscountById);
 router.post("/", protect.authorize("admin"),discountController.CreateDiscount);
+
+router.post(
+  "/importExcelData2MongoDB",
+  discountController.importExcelData2MongoDB
+);
+
 module.exports = router;

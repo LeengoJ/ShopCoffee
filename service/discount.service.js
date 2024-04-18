@@ -58,4 +58,12 @@ module.exports = {
       return {error:"Khong co Discount nay"};
     }
   },
+  insertMany: async (data) => {
+    const discount = Discount.insertMany(data);
+    if (discount.length > 0) {
+      return discount;
+    } else {
+      return "loi tao";
+    }
+  },
 };
