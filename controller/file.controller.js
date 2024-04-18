@@ -1,7 +1,9 @@
 const fs = require("fs");
+// const { promisify } = require('util');
 const baseUrl = "http://localhost:3000/api/files/";
 const apiResponse = require("../helper/api-response");
 const uploadFile = require("../middleware/upload");
+// const unlinkAsync = promisify(fs.unlink);
 
 const getListFiles = (req, res) => {
   const directoryPath = __basedir + "/public/upload/";
@@ -39,26 +41,16 @@ const download = (req, res) => {
   });
 };
 const upload = async (req, res) => {
-  console.log("sad");
-
-  try {
-    await uploadFile(req, res);
-    if (req.file == undefined) {
-      return apiResponse.validationErrorWithData(
-        res,
-        "Upload a file please!",
-        {}
-      );
+  if (req.file != undefined) {
+    console.log(req.file.path);
+    try{
+      await uploadFile.unlinkAsync(req.file.path);
+      
+    }catch(err){
+      console.log(err);
     }
-    return apiResponse.successResponseWithData(
-      res,
-      "File Uploaded Successfully",
-      { path: req.file.path }
-    );
-  } catch (err) {
-    console.error("Error saving file:", err);
-    return apiResponse.ErrorResponse(res, err);
   }
+  res.send(req.body);
 };
 module.exports = {
   getListFiles,

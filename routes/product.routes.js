@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 const protect = require("../middleware/protect");
 const productController = require("../controller/productController");
+const multer = require("../middleware/upload");
 
-router.post("", productController.CreateProduct, protect.authorize("admin"));
+router.post("", protect.authorize("admin"),multer.upload.single("img"), productController.CreateProduct);
 router.post(
   "/:id",
+  multer.upload.single("img"),
   productController.UpdateProduct,
   protect.authorize("admin")
 );
