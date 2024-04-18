@@ -63,7 +63,7 @@ module.exports = {
     if (discount.length > 0) {
       return discount;
     } else {
-      return "loi tao";
+      return {error:"loi tao"};
     }
   },
 };
