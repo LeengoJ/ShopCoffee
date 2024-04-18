@@ -9,7 +9,6 @@ const UserSchema = new Schema(
   {
     name: String,
     email: { type: String, unique: true },
-    email_verified_at: { type: Date, default: null },
     password: String,
     role: String,
     sdt: String,
@@ -21,13 +20,13 @@ const UserSchema = new Schema(
 
 // Ma hoa password
 UserSchema.pre("save", function (next) {
-  if (!this.isModified("passWord")) {
+  if (!this.isModified("password")) {
     next();
   } else {
-    let salt = bcrypt.genSaltSync(configs.saltRounds); // tao 1 chuoi ngau nhien duoc 1 cach dong bo
-    this.passWord = bcrypt.hashSync(this.passWord, salt); //;luu chuoi vua duoc tao ra bang ham hashSync vao db
+    let salt = bcrypt.genSaltSync(configs.saltRounds); // tạo ra một chuỗi ngẫu nhiên một cách đồng bộ
+    this.password = bcrypt.hashSync(this.password, salt); // lưu mật khẩu đã mã hóa vào cơ sở dữ liệu
+    next();
   }
-  next();
 });
 //Chua hieu lam, co le la set thoi gian requet lay id,cha biet dc, hoi giong phan quyen, hoi giong bao mat
 UserSchema.methods.getSignedJWT = function () {
@@ -48,7 +47,6 @@ UserSchema.methods.UpdatePwNew = async function (user) {
 };
 //Gui ve client 1 token cho phep giu truy cap quyen thay doi passWord
 UserSchema.methods.resetPassword = function () {
-  console.log("5");
   const resetToken = crypto.randomBytes(20).toString("hex");
   this.resetPassToken = crypto
     .createHash("sha256") //Thuat toan su dung de ma hoa
@@ -58,21 +56,21 @@ UserSchema.methods.resetPassword = function () {
   return resetToken;
 };
 
-UserSchema.statics.findByCredentinal = async function (usern, pass) {
-  if (!usern || !pass) {
-    return { error: "khong de trong user va password" };
+UserSchema.statics.findByCredentinal = async function (email, pass) {
+  if (!email || !pass) {
+    return { error: "không để trống email và password" };
   }
-  // console.log(usern);
-  let user = await this.findOne({ userName: usern });
-  // console.log(user);
+  // console.log(email);
+  let user = await this.findOne({ email: email });
+  console.log(user);
 
   if (!user) {
-    return { error: "user khong ton tai" };
+    return { error: "user không tồn tại" };
   }
-  let isMatch = await bcrypt.compare(pass, user.passWord);
+  let isMatch = await bcrypt.compare(pass, user.password);
   console.log(isMatch);
   if (!isMatch) {
-    return { error: "password sai" };
+    return { error: "mật khẩu sai" };
   }
   return user;
 };

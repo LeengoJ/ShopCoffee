@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const { Timestamp } = require("mongodb");
 
 const ProductSchema = new Schema(
   {
-    productId: { type: Number, unique: true },
+    // productId: { type: Number, unique: true },
     name: String,
     img: { type: String, default: null },
     sizes: String,

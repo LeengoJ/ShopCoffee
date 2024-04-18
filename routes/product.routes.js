@@ -1,21 +1,26 @@
-// const express = require("express");
-// const router = express.Router();
-// const checkRoleAdmin = require("../middleware/checkrole");
-// const {
-//   create,
-//   update,
-//   deleteProduct,
-//   getProduct,
-//   getAllProducts,
-// } = require("../controllers/productController");
+const express = require("express");
+const router = express.Router();
+const protect = require("../middleware/protect");
+const productController = require("../controller/productController");
 
-// router.use(checkRoleAdmin);
-// router.post("", create);
-// router.post("/:id", update);
-// router.delete("/:id", deleteProduct);
-// router.get("/:id", getProduct);
+router.post("", productController.CreateProduct, protect.authorize("admin"));
+router.post(
+  "/:id",
+  productController.UpdateProduct,
+  protect.authorize("admin")
+);
+router.delete(
+  "/:id",
+  productController.DeleteProduct,
+  protect.authorize("admin")
+);
+router.get(
+  "/:id",
+  productController.GetProductById,
+  protect.authorize("admin")
+);
 
-// // no middleware applied for these routes
-// router.get("", getAllProducts);
+// no middleware applied for these routes
+// router.get("", productController.GetAllProduct, protect.authorize("admin"));
 
-// module.exports = router;
+module.exports = router;
