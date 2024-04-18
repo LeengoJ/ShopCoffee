@@ -7,19 +7,23 @@ const multer = require("../middleware/upload");
 router.post("", protect.authorize("admin"),multer.upload.single("img"), productController.CreateProduct);
 router.post(
   "/:id",
+  protect.authorize("admin"),
   multer.upload.single("img"),
   productController.UpdateProduct,
-  protect.authorize("admin")
 );
 router.delete(
   "/:id",
+  protect.authorize("admin"),
   productController.DeleteProduct,
-  protect.authorize("admin")
 );
 router.get(
   "/:id",
+  protect.authorize("admin"),
   productController.GetProductById,
-  protect.authorize("admin")
+);
+router.get(
+  "/",
+  productController.GetAllProduct
 );
 
 // no middleware applied for these routes

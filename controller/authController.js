@@ -3,6 +3,8 @@ const handleResult = require("../helper/handleResult"); //helper chứa hàm sho
 
 exports.registerController = async (req, res) => {
   // console.log(req.body);
+  // res.send(req.body);
+  req.body.isBan = "no";
   const result = await authService.Register(req.body);
 
   if (result.error) {
@@ -13,11 +15,12 @@ exports.registerController = async (req, res) => {
 };
 
 exports.loginController = async (req, res) => {
+  // console.log(req.body);
   const result = await authService.Login(req.body);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
-    handleResult.showResult(res, 200, true, "Đăng nhập thành công", result);
+    handleResult.showResult(res, 200, true, "Đăng nhập thành công", {token:result});
   }
 };
 
@@ -55,4 +58,7 @@ exports.forgotPasswordController = async (req, res) => {
       null
     );
   }
+};
+exports.checkLoginController = async (req, res) => {
+  handleResult.showResult(res, 200, true, "Đăng nhập thành công", {});
 };

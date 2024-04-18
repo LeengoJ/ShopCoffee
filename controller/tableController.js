@@ -2,10 +2,15 @@ const TableService = require("../service/table.service"); //Import dịch vụ l
 const handleResult = require("../helper/handleResult"); //helper chứa hàm showResult
 
 exports.GetAllTable = async (req, res) => {
-  const result = await TableService.GetAllTable();
+  let result = await TableService.GetAllTable();
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
+    result = result.map(t=>{
+      t = t.toObject();
+      t.id = t._id.toString();
+      return t;
+    })
     handleResult.showResult(res, 200, true, "Success", result);
   }
 };
@@ -14,14 +19,16 @@ exports.CreateTable = async (req, res) => {
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
-    handleResult.showResult(res, 200, true, "Success", result);
+    handleResult.showResult(res, 200, true, "Success", {id:result._id.toString()});
   }
 };
 exports.GetTableById = async (req, res) => {
-  const result = await TableService.GetTableById(req.params.id);
+  let result = await TableService.GetTableById(req.params.id);
   if (result.error) {
     handleResult.showResult(res, 400, false, result.error, null);
   } else {
+    result = result.toObject();
+    result.id = result._id.toString();
     handleResult.showResult(res, 200, true, "Success", result);
   }
 };

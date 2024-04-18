@@ -7,36 +7,28 @@ module.exports = {
   },
   GetAllTable: async () => {
     let allTable = await Table.find().exec();
-    if (allTable.length > 0) {
-      return allTable;
-    } else {
-      return "Khong co table nao";
-    }
+    return allTable;
   },
   GetTableById: async (item) => {
     let table = await Table.findById(item).exec();
     if (table) {
       return table;
     } else {
-      return "Khong co table nao";
+      return {error:"Khong co table nao"};
     }
   },
   updatedTable: async (id, newTable) => {
     const updatedTable = await Table.findByIdAndUpdate(id, newTable, {
       new: true,
     }); // {new: true} để trả về object sau khi cập nhật
-    if (updatedTable) {
-      return updatedTable;
-    } else {
-      return "Khong co table voi id nay";
-    }
+    return  updatedTable;
   },
   deletedTable: async (id) => {
     const deletedTable = await Table.findByIdAndDelete(id);
-    if (updatedTable) {
+    if (deletedTable) {
       return "Da xoa thanh cong" + deletedTable;
     } else {
-      return "Khong co table voi id nay";
+      return {error:"Khong co table voi id nay"};
     }
   },
   searchByName: async (name) => {
@@ -53,10 +45,10 @@ module.exports = {
       { status },
       { new: true }
     );
-    if (updateStatus.length > 0) {
+    if (updateStatus) {
       return updateStatus;
     } else {
-      return "Khong co table nay";
+      return {error:"Khong co table nay"};
     }
   },
 };

@@ -1,9 +1,27 @@
 const OrderService = require("../service/order.service"); //Import dịch vụ liên quan đến user
+const ProductService = require("../service/product.service"); //Import dịch vụ liên quan đến user
+const DiscountService = require("../service/discount.service"); //Import dịch vụ liên quan đến user
 const OrderModel = require("../schema/order.schema"); //Import dịch vụ liên quan đến user
 const handleResult = require("../helper/handleResult"); //helper chứa hàm showResult
 const ServiceResponse = require('../service/ServiceResponse');
 
 const findDiscount = function(discounts, discountCode, productId){
+    let now=Date.now();
+    for(i=0; i<discounts.length; i++){
+        if(discounts[i].startTime<=now&&discounts[i].endTime>=now){
+            if(discounts[i].code==discountCode){
+                if(Array.isArray(discounts[i].productIds)){
+                    if(discounts[i].productIds.map(p=>p.toString()).indexOf(productId)!=-1){
+                        return discounts[i];
+                    }
+                }else{
+                    if(discounts[i].productIds==productId){
+                        return discounts[i];
+                    }
+                }
+            }
+        }
+    }
     discounts.forEach(discount => {
         if(discount.startTime<=Date.now()||discount.endTime>=Date.now){
             if(discount.code==discountCode){
@@ -23,18 +41,20 @@ const findDiscount = function(discounts, discountCode, productId){
 }
 
 const getPriceOfSizes = function(sizes, size){
-    sizes.split(";").forEach(e=>{
-        let plt = e.split(":");
+    let sizeArr = sizes.split(";");
+    for(i=0 ; i<sizeArr.length ; i++){
+        let plt = sizeArr[i].split(":");
         if(plt[0]==size){
             return parseInt(plt[1]);
         }
-    });
+    }
     return null;
 }
 const findProduct = function(products, productId){
-    let product = products.find(p=>p.productId==productId);
-    if(product){
-        return product;
+    let productInd = products.findIndex(p=>p._id.toString()===productId);
+    if(productInd>-1){
+        // console.log(products[productInd]);
+        return products[productInd];
     }
     return null;
 }
@@ -71,12 +91,13 @@ const addSizeToProduct = (products, productId, name,size,number,price)=>{
 
 module.exports.create = async (req,res) => {
     try {
+        // console.log(req.body);
         const idUser = req.user.id;
 
         //get discounts now
-        const discountsNow = [];
+        const discountsNow = await DiscountService.GetAllDiscountValidNow();
         //get products now
-        const productsNow = [];
+        const productsNow = await ProductService.GetAllProduct();
 
         const {tableNumber,isTakeAway,sdt,note,discountCode} = req.body;
         const productsReq =  req.body.products;
@@ -86,11 +107,11 @@ module.exports.create = async (req,res) => {
         let totalPrice = 0;
         let numberProducts = 0;
 
-        productsReq.split(';').map(productReq => {
+        productsReq.split(';').forEach(productReq => {
             let sizeSplit = productReq.split(':');
             let productId = sizeSplit[0];
-            let size = sizeSplit[2];
-            let number = parseInt(sizeSplit[3]);
+            let size = sizeSplit[1];
+            let number = parseInt(sizeSplit[2]);
 
             let product = findProduct(productsNow,productId);
             if(product){
@@ -145,7 +166,9 @@ module.exports.getList = async (req,res) => {
         }
         let orders = resAction.data;
         orders = orders.map(order=>{
-            order.user = order.user.name;
+            order = order.toObject();
+            order.orderId = order._id.toString();
+            order.user = order.user&&order.user.name;
             order.staff = order.staff.name;
             return order;
         });
@@ -163,7 +186,7 @@ const convertProductsToProductSizes = function(products){
         if(product.sizes){
             product.sizes.forEach(size=>{
                 productSizes.push({
-                    productId:product.productId,
+                    productId:product.id,
                     name:product.name,
                     size:size.size,
                     number:size.number,
@@ -183,12 +206,13 @@ module.exports.details = async (req,res) => {
             handleResult.fail(res,resAction.error);
             return;
         }
-        let beforeOrder = resAction.data;
-        beforeOrder.user = beforeOrder.user.name;
-        beforeOrder.staff = beforeOrder.user.staff;
-        beforeOrder.products = convertProductsToProductSizes(beforeOrder.products);
+        let order = resAction.data.toObject();
+        order.orderId = order._id.toString();
+        order.user = order.user&&order.user.name;
+        order.staff = order.staff.name;
+        order.products = convertProductsToProductSizes(order.products);
         
-        handleResult.success(res,beforeOrder);
+        handleResult.success(res,order);
     }  
     catch (error) {  
         console.log(error);
@@ -198,11 +222,16 @@ module.exports.details = async (req,res) => {
 
 module.exports.changeStatus = async (req,res) => {
     try {
+        const idUser = req.user.id;
         const id = req.params.id;
         const status = req.body.status;
 
         let updateFields = {
-            $set:{status:status}
+            $set:{
+                status:status,
+                staff:idUser,
+                editTime:Date.now()
+            }
         };
         let resAction = await OrderService.update(id,updateFields);
         if (!resAction.isSuccess) {
@@ -223,9 +252,9 @@ module.exports.update = async (req,res) => {
         const idOrder = req.params.id;
 
         //get discounts now
-        const discountsNow = [];
+        const discountsNow = await DiscountService.GetAllDiscountValidNow();
         //get products now
-        const productsNow = [];
+        const productsNow = await ProductService.GetAllProduct();
 
         const {tableNumber,isTakeAway,sdt,note,discountCode} = req.body;
         const productsReq =  req.body.products;
@@ -235,11 +264,11 @@ module.exports.update = async (req,res) => {
         let totalPrice = 0;
         let numberProducts = 0;
 
-        productsReq.split(';').map(productReq => {
+        productsReq.split(';').forEach(productReq => {
             let sizeSplit = productReq.split(':');
             let productId = sizeSplit[0];
-            let size = sizeSplit[2];
-            let number = parseInt(sizeSplit[3]);
+            let size = sizeSplit[1];
+            let number = parseInt(sizeSplit[2]);
 
             let product = findProduct(productsNow,productId);
             if(product){

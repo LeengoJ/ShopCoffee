@@ -7,6 +7,7 @@ const DiscountSchema = new Schema(
     startTime: Number,
     endTime: Number,
     name: String,
+    description: String,
     code: { type: String, unique: true },
     discountPercent: Number,
     productIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
